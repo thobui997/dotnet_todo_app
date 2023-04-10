@@ -4,7 +4,7 @@ namespace ToDoApp.API.Resources;
 
 public class SaveToDoResource
 {
-    [Required] 
+    [Required(ErrorMessage = "Tên task là thông tin bắt buộc")] 
     [MaxLength(30)] 
     public string Name { get; set; }
 

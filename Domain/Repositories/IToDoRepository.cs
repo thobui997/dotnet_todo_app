@@ -6,4 +6,6 @@ public interface IToDoRepository
 {
     Task<IEnumerable<ToDo>> ListAsync();
     Task AddAsync(ToDo toDo);
+    Task<ToDo> FindByIdAsync(string id);
+    void Update(ToDo toDo);
 }

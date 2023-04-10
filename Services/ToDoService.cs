@@ -36,4 +36,30 @@ public class ToDoService : IToDoService
             return new ToDoResponse($"An error occurred when saving the category: {ex.Message}");
         }
     }
+
+    public async Task<ToDoResponse> UpdateAsync(string id, ToDo todo)
+    {
+        var existingTodo = await _toDoRepository.FindByIdAsync(id);
+
+        if (existingTodo == null)
+        {
+            return new ToDoResponse("Todo not found!");
+        }
+
+        existingTodo.Name = todo.Name;
+        existingTodo.Description = todo.Description;
+
+        try
+        {
+            _toDoRepository.Update(existingTodo);
+            await _unitOfWork.CompleteAsync();
+
+            return new ToDoResponse(existingTodo);
+        }
+        catch (Exception ex)
+        {
+            // Do some logging stuff
+            return new ToDoResponse($"An error occurred when updating the category: {ex.Message}");
+        }
+    }
 }

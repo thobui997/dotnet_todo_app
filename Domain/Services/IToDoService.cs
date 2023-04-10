@@ -7,4 +7,5 @@ public interface IToDoService
 {
     Task<IEnumerable<ToDo>> ListAsync();
     Task<ToDoResponse> SaveAsync(ToDo todo);
+    Task<ToDoResponse> UpdateAsync(string id, ToDo todo);
 }

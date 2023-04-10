@@ -20,4 +20,15 @@ public class ToDoRepository : BaseRepository, IToDoRepository
     {
         await _context.ToDoList.AddAsync(toDo);
     }
+
+    public async Task<ToDo> FindByIdAsync(string id)
+    {
+        var idConverted = new Guid(id);
+        return await _context.ToDoList.FindAsync(idConverted);
+    }
+
+    public void Update(ToDo toDo)
+    {
+        _context.ToDoList.Update(toDo);
+    }
 }
