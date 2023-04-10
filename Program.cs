@@ -1,7 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using ToDoApp.API.Domain.Repositories;
 using ToDoApp.API.Domain.Services;
-using ToDoApp.API.Mapping;
 using ToDoApp.API.Persistence.Contexts;
 using ToDoApp.API.Persistence.Repositories;
 using ToDoApp.API.Services;
@@ -10,12 +9,15 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllers();
-builder.Services.AddTransient<SeedData>();
+
+// connect to database
 builder.Services.AddDbContext<AppDbContext>(options =>
 {
     options.UseNpgsql(builder.Configuration.GetConnectionString("WebApiDatabase"));
 });
 
+
+// add dependencies 
 builder.Services.AddScoped<IToDoRepository, ToDoRepository>();
 builder.Services.AddScoped<IToDoService, ToDoService>();
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
@@ -27,23 +29,6 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
-
-// Console.WriteLine(args[0].ToLower());
-
-if (args.Length == 1 && args[0].ToLower() == "seeddata")
-{
-    Console.WriteLine("run");
-    SeedData(app);
-}
-
-void SeedData(IHost host)
-{
-    var scopeFactory = host.Services.GetService<IServiceScopeFactory>();
-    using var scope = scopeFactory?.CreateScope();
-    var service = scope?.ServiceProvider.GetService<SeedData>();
-    service?.Seed();
-}
-
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
